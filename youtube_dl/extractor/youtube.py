@@ -1316,10 +1316,14 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             raise ExtractorError('Cannot identify player %r' % player_url)
         return id_m.group('ext'), id_m.group('id')
 
-    def _rate_limit_download(self, url, video_id, note=None, **kwargs):
+    def _rate_limit_download(self, url_or_request, video_id, note=None, errnote=None, fatal=True, encoding=None, data=None, headers={}, query={}, expected_status=None):
 
+        # Strip hashes from the URL (#1038)
+        if isinstance(url_or_request, (compat_str, str)):
+            url_or_request = url_or_request.partition('#')[0]
+            
         if not self._downloader.params.get('youtube_bypass_429', False):
-            return self._download_webpage(url, video_id, note=note, **kwargs)
+            return self._download_webpage_handle(url_or_request, video_id)
 
         if note is not None:
             if note is not False:
@@ -1331,8 +1335,13 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             self.report_download_webpage(video_id)
 
         try:
-            return subprocess.run([self._downloader.params.get('wget_location', 'wget'), '-q', '--limit-rate', str(self._downloader.params.get('wget_limit_rate', 8191)), '-O', '-', url],
-                              check=True, stdout=subprocess.PIPE).stdout.decode(encoding='UTF-8')
+            urlh = subprocess.run([self._downloader.params.get('wget_location', 'wget'), '-q', '--limit-rate', str(self._downloader.params.get('wget_limit_rate', 8191)), '-O', '-', url], check=True, stdout=subprocess.PIPE).stdout.decode(encoding='UTF-8')
+            if urlh is False:
+                assert not fatal
+                return False
+            content = self._webpage_read_content(urlh, url_or_request, video_id, note, errnote, fatal, encoding=encoding)
+            return (content, urlh)            
+            
         except subprocess.CalledProcessError as er:
             # TODO: Report errors better
             raise ExtractorError(
