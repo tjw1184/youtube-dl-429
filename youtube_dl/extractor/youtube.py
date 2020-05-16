@@ -1335,7 +1335,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             self.report_download_webpage(video_id)
 
         try:
-            urlh = subprocess.run([self._downloader.params.get('wget_location', 'wget'), '-q', '--limit-rate', str(self._downloader.params.get('wget_limit_rate', 8191)), '-O', '-', url], check=True, stdout=subprocess.PIPE).stdout.decode(encoding='UTF-8')
+            urlh = subprocess.run([self._downloader.params.get('wget_location', 'wget'), '-q', '--limit-rate', str(self._downloader.params.get('wget_limit_rate', 8191)), '-O', '-', url_or_request], check=True, stdout=subprocess.PIPE).stdout.decode(encoding='UTF-8')
             if urlh is False:
                 assert not fatal
                 return False
