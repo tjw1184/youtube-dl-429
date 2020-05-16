@@ -572,7 +572,25 @@ def parseOpts(overrideArguments=None):
             'Upper bound of a range for randomized sleep before each download '
             '(maximum possible number of seconds to sleep). Must only be used '
             'along with --min-sleep-interval.'))
+    workarounds.add_option(
+        '--youtube-bypass-429',
+        action='store_true', dest='youtube_bypass_429',
+        help='(Experimental) Uses wget to rate limit the download of certain webpages that are commonly 429 rate-limited (and which this workaround usually works with).'
+            'Will also prevent you from getting rate limited.')
+    workarounds.add_option(
+        '--wget-location',
+        dest='wget_location', default='wget', metavar='PATH',
+        help='(Experimental) Manually provide the location of a wget binary (if it is not in your PATH). Only used with --youtube-bypass-429.'
+    )
+    workarounds.add_option(
+        '--wget-limit-rate',
+        dest='wget_limit_rate', default=8191, metavar='RATE',
+        help='(Experimental) Manually adjust the rate limit value passed to wget. '
+            'The default value of 8191 should work in most cases, '
+            'but feel free to experiment. Only used with --youtube-bypass-429.'
+    )
 
+    
     verbosity = optparse.OptionGroup(parser, 'Verbosity / Simulation Options')
     verbosity.add_option(
         '-q', '--quiet',
