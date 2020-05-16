@@ -388,7 +388,6 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
                             (?:www\.)?invidious\.drycat\.fr/|
                             (?:www\.)?tube\.poal\.co/|
                             (?:www\.)?vid\.wxzm\.sx/|
-                            (?:www\.)?yewtu\.be/|
                             (?:www\.)?yt\.elukerio\.org/|
                             (?:www\.)?yt\.lelux\.fi/|
                             (?:www\.)?kgg2m7yk5aybusll\.onion/|
