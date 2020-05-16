@@ -1771,7 +1771,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
         url = proto + '://www.youtube.com/watch?v=%s&gl=US&hl=en&has_verified=1&bpctr=9999999999' % video_id
         video_webpage, urlh = self._rate_limit_download(url, video_id)        
 
-        qs = compat_parse_qs(compat_urllib_parse_urlparse(urlh.geturl()).query)
+        qs = compat_parse_qs(compat_urllib_parse_urlparse(url))
         video_id = qs.get('v', [None])[0] or video_id
 
         # Attempt to extract SWF player URL
