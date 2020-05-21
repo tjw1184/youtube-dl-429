@@ -2250,9 +2250,10 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
                 [r'(?s)id="eow-date.*?>(.*?)</span>',
                  r'(?:id="watch-uploader-info".*?>.*?|["\']simpleText["\']\s*:\s*["\'])(?:Published|Uploaded|Streamed live|Started) on (.+?)[<"\']'],
                 video_webpage, 'upload date', default=None)
+        if upload_date is None:
+            raise ExtractorError('Warning: upload_date=none  -  skipping .', expected=True)
         upload_date = unified_strdate(upload_date)
-        if not upload_date:
-            raise ExtractorError('Warning: upload_date=null  -  skipping .', expected=True)
+
 
         video_license = self._html_search_regex(
             r'<h4[^>]+class="title"[^>]*>\s*License\s*</h4>\s*<ul[^>]*>\s*<li>(.+?)</li',
