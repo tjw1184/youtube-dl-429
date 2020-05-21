@@ -1715,6 +1715,8 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             r'(?:^|<br\s*/>)([^<]*<a[^>]+onclick=["\']yt\.www\.watch\.player\.seekTo[^>]+>(\d{1,2}:\d{1,2}(?::\d{1,2})?)</a>[^>]*)(?=$|<br\s*/>)',
             description)
         if not chapter_lines:
+            chapter_lines = re.findall(r'(?:^|<br\s*/>)([^<]*<a[^>]+onclick=["\']yt\.www\.watch\.player\.seekTo[^>]+>(\d{1,2}:\d{1,2}(?::\d{1,2})?)</a>(?:[^<]*<a.*?)?[^>]*)(?=$|<br\s*/>)',description)            
+        if not chapter_lines:
             return None
         chapters = []
         for next_num, (chapter_line, time_point) in enumerate(
